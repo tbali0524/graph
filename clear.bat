@@ -1,0 +1,1 @@
+del output_*.txt

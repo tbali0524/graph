@@ -1,0 +1,16 @@
+# input file for Graph.PHP
+; desc
+Test Graph 2: full undirected graph with vertex weights
+; isDirected
+undirected
+; vertices
+5
+; vertex weights
+10, 20, 30, 40, 50
+; adjacency matrix
+ 0,  1,  1,  1,  1
+ 1,  0,  1,  1,  1
+ 1,  1,  0,  1,  1
+ 1,  1,  1,  0,  1
+ 1,  1,  1,  1,  0
+; end
