@@ -1,12 +1,12 @@
 # input file for Graph.PHP
 ; desc
-graph from Bender 2 IDE Test 03
+graph from Bender 2 IDE Test ...
 ; isDirected
 directed
 ; vertices
 16
 ; vertex weights
--17, -15, -15, -20, -12, -11, -18, -19, -12, -11, -13, -14, -17, -19, -15, 0
+17, 15, 15, 20, 12, 11, 18, 19, 12, 11, 13, 14, 17, 19, 15, 0
 ; adjacency list
 1, 2
 3, 4

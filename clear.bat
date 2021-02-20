@@ -1,1 +1,1 @@
-del output_*.txt
+@del test\output_*.txt

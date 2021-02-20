@@ -1,0 +1,14 @@
+# input file for Graph.PHP
+; desc
+Test Graph 1: small directed unweighted graph
+; isDirected
+directed
+; vertices
+5
+; adjacency matrix
+ 0,  1,  1,  0,  0
+ 0,  0,  1,  0,  0
+ 0,  0,  0,  1,  0
+ 0,  0,  0,  0,  1
+ 0,  1,  0,  0,  0
+; end
