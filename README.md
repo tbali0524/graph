@@ -35,6 +35,6 @@ Clear all generated report files (test\output*.txt)
 Convert some CG puzzle test cases to internal graph description format
 > convert.bat
 
-Notes:
-The constant GENERATE_TEST_CASE must be set to true in source file!
-The constant PUZZLE_ID can be set in the source file: 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise
+Notes for converting:
+* The constant GENERATE_TEST_CASE must be set to true in source file!
+* The constant PUZZLE_ID can be set in the source file: 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise
