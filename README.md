@@ -1,5 +1,5 @@
 # graph
-Graph class &amp; some common algorithms in PHP
+Graph class &amp; some related common algorithms in PHP
 
 * public function analyzeGraph(): void
 * public function reportGraph(int $maxVertex = DEBUG_MAX_VERTEX_TO_SHOW): string
@@ -21,20 +21,20 @@ Graph class &amp; some common algorithms in PHP
 *   static function callFunction(int $idx): bool
 * public function calculateComponents(): void
 
-Usage:
+Basic usage:
 > php graph.php <input.txt >output.txt
 
-Create graph report for all sample graphs in test/input*.txt
+Helper scripts (Windows only):
+
+Create graph report for all sample graphs in test\input*.txt
 > test.bat
 
-Clear all generated files (test/output*.txt)
+Clear all generated report files (test\output*.txt)
 > clear.bat
 
 Convert some CG puzzle test cases to internal graph description format
 > convert.bat
+
 Notes:
 The constant GENERATE_TEST_CASE must be set to true in source file!
 The constant PUZZLE_ID can be set in the source file: 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise
-
-
-Licence: GNU General Public License v3
