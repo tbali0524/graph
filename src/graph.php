@@ -2,7 +2,8 @@
 
 // --------------------------------------------------------------------
 // Graph class
-// (c) 2020 by Balint Toth
+// (c) 2021 by Balint Toth
+// minimum PHP version: 7.3
 // --------------------------------------------------------------------
 
 declare(strict_types=1);
@@ -1291,4 +1292,3 @@ if (GENERATE_TEST_CASE) {
 } else {
     $gt->testGraph();
 }
-// To debug (equivalent to var_dump): error_log(var_export($var, true));
