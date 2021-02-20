@@ -65,7 +65,7 @@ class Graph
     public $componentIdx = null; // component membership:   array[idx] of int       DFS/BFS, countComponents
     public $componentCount = null; // # of components       int                     countComponents
 
-     /* methods
+    /* methods
     public function analyzeGraph(): void
     public function reportGraph(int $maxVertex = DEBUG_MAX_VERTEX_TO_SHOW): string
     public function readGraph(): void
@@ -1261,10 +1261,10 @@ class GraphTest
         $g->analyzeGraph();
         echo $g->reportGraph(100);
         echo '  shortest path from 0 to ' . ($g->v - 1) . ': ' . implode('->', $g->getPath(0, $g->v - 1)) . "\n";
-        echo '  BFS traverse order: ' ;
+        echo '  BFS traverse order: ';
         $g->BFS(0, array('\Graph\Graph', 'callFunction'));
         echo "\n";
-        echo '  DFS traverse order: ' ;
+        echo '  DFS traverse order: ';
         // $g->dfsIterative(0, array('\Graph\Graph', 'callFunction'));
         $g->dfsIterative(0, '\Graph\Graph::callFunction');
         echo "\n";
