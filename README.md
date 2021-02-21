@@ -1,5 +1,5 @@
 # graph
-Graph class and some related common algorithms in PHP
+Graph class and some related common algorithms in PHP\
 (c) 2021 by Balint Toth (TBali)\
 v1.1
 
