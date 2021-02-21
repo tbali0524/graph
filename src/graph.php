@@ -1,39 +1,26 @@
 <?php
 
-// --------------------------------------------------------------------
-// Graph class
-// (c) 2021 by Balint Toth
-// minimum PHP version: 7.3
-// --------------------------------------------------------------------
+/**
+ * ====================================================================
+ * graph
+ * (c) 2021 by Bálint Tóth (TBali)
+ * a graph class and some related common algorithms in PHP
+ *
+ * repository for latest source: https://github.com/tbali0524/graph
+ * requires PHP v7.3 or higher
+ * ====================================================================
+ */
 
 declare(strict_types=1);
 
 namespace Graph;
 
-define('DEBUG', false);
-define('DEBUG_MAX_VERTEX_TO_SHOW', 5);
-define('GENERATE_TEST_CASE', false);
-define('PUZZLE_ID', 0);         // 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise
+use Graph\Node;
+use Graph\MinPriorityQueue;
+use Graph\MyMinPriorityQueue;
 
-// --------------------------------------------------------------------
-// Problem specific data for each graph vertex
-class Node
-{
-    public $idx = 0;
+const DEBUG = false;
 
-    public function __construct(int $_idx = 0)
-    {
-        $this->idx = $_idx;
-    }
-
-    public function toString(): string
-    {
-        return strval($this->idx);
-    }
-}
-// class Node
-
-// --------------------------------------------------------------------
 class Graph
 {
     public $desc = '';          // graph description        string
@@ -66,9 +53,11 @@ class Graph
     public $componentIdx = null; // component membership:   array[idx] of int       DFS/BFS, countComponents
     public $componentCount = null; // # of components       int                     countComponents
 
+    public const DEBUG_MAX_VERTEX_TO_SHOW = 5;
+
     /* methods
     public function analyzeGraph(): void
-    public function reportGraph(int $maxVertex = DEBUG_MAX_VERTEX_TO_SHOW): string
+    public function reportGraph(int $maxVertex = self::DEBUG_MAX_VERTEX_TO_SHOW): string
     public function readGraph(): void
     public function writeGraph(): void
     public function adjL2M(): void
@@ -123,7 +112,7 @@ class Graph
     // function analyzeGraph
 
     // returns graph report in multi-line string
-    public function reportGraph(int $maxVertex = DEBUG_MAX_VERTEX_TO_SHOW): string
+    public function reportGraph(int $maxVertex = self::DEBUG_MAX_VERTEX_TO_SHOW): string
     {
         $maxVertex = min($this->v, $maxVertex);
         $vw = ($maxVertex < 100 ? 2 : 3);       // format width for vertex index display
@@ -354,6 +343,9 @@ class Graph
                 if (strtolower($line[0]) == 'none') {
                     $this->adjL[$i] = [];
                 } else {
+                    for ($j = 0; $j < count($line); $j++) {
+                        $line[$j] = intval($line[$j]);
+                    }
                     $this->adjL[$i] = $line;
                 }
             }
@@ -363,7 +355,11 @@ class Graph
             $this->adjL = null;
             $this->adjM = array();
             for ($i = 0; $i < $this->v; $i++) {
-                $this->adjM[$i] = explode(',', $this->readNextLine());
+                $line = explode(',', $this->readNextLine());
+                for ($j = 0; $j < count($line); $j++) {
+                    $line[$j] = intval($line[$j]);
+                }
+                $this->adjM[$i] = $line;
             }
             $s = $this->readNextLine(false);
         }
@@ -380,6 +376,9 @@ class Graph
                 $line = explode(',', $this->readNextLine());
                 if (count($line) < 3) {
                     continue;
+                }
+                for ($j = 0; $j < count($line); $j++) {
+                    $line[$j] = intval($line[$j]);
                 }
                 $this->adjL[$line[0]][] = $line[1];
                 $this->edgeW[$line[0]][$line[1]] = $line[2];
@@ -1005,290 +1004,4 @@ class Graph
         }
     }
     // function calculateComponents
-}
-// class Graph
-
-// --------------------------------------------------------------------
-// used by Dijkstra algorithm
-class MinPriorityQueue extends \SPLPriorityQueue
-{
-    public function compare($a, $b): int
-    {
-        return parent::compare($b, $a);     //inverse the order
-    }
-}
-// class MinPriorityQueue
-
-// --------------------------------------------------------------------
-// used by aStar algorithm
-// naive implementation using array, allows to change priority of any item
-class MyMinPriorityQueue
-{
-    private $data = array();                // array[0..] of value (int/float/string)
-    private $priority = array();            // array[value] of int/float
-
-    public const ERROR_MSG_GET_EMPTY = 'Trying to get item from empty Priority queue!';
-    public const ERROR_MSG_INSERT_EXISTING = 'Trying to insert already existing item to Priority queue!';
-    public const ERROR_MSG_CHANGE_NON_EXISTENT = 'Trying to update non-existing item in Priority queue!';
-    public const ERROR_MSG_DELETE_NON_EXISTENT = 'Trying to delete non-existing item in Priority queue!';
-
-    public function compare($a, $b): int
-    {
-        $ans = ($this->priority[$b] ?? PHP_INT_MAX) <=> ($this->priority[$a] ?? PHP_INT_MAX);
-        if ($ans == 0) {
-            $ans = $b <=> $a;
-        }
-        return $ans;
-    }
-
-    public function top()
-    {
-        if (count($this->data) == 0) {
-            throw new \Exception(self::ERROR_MSG_GET_EMPTY);
-        }
-        return $this->data[count($this->data) - 1];
-    }
-
-    public function extract()
-    {
-        if (count($this->data) == 0) {
-            throw new \Exception(self::ERROR_MSG_GET_EMPTY);
-        }
-        $ans = array_pop($this->data);
-        unset($this->priority[$ans]);
-        return $ans;
-    }
-
-    public function insert($item, $priority): void
-    {
-        if (isset($this->priority[$item])) {
-            throw new \Exception(self::ERROR_MSG_INSERT_EXISTING);
-        }
-        $this->data[] = $item;
-        $this->priority[$item] = $priority;
-        usort($this->data, array('\Graph\MyMinPriorityQueue', 'compare'));
-    }
-
-    public function changePriority($item, $priority): void
-    {
-        if (!isset($this->priority[$item])) {
-            throw new \Exception(self::ERROR_MSG_CHANGE_NON_EXISTENT);
-        }
-        $this->priority[$item] = $priority;
-        usort($this->data, array('\Graph\MyMinPriorityQueue', 'compare'));
-    }
-
-    public function exists($item): bool
-    {
-        return isset($this->priority[$item]);
-    }
-
-    public function isEmpty(): bool
-    {
-        return count($this->data) == 0;
-    }
-
-    public function count(): int
-    {
-        return count($this->data);
-    }
-
-    public function toString(): string
-    {
-        $s = '';
-        foreach ($this->data as $item) {
-            $s .= $item . ' (' . $this->priority[$item] . ') ';
-        }
-        return $s;
-    }
-}
-// class MyMinPriorityQueue
-
-// --------------------------------------------------------------------
-class GraphTest
-{
-    public $g = null;
-
-    public function readInputBender2(): void
-    {
-        $g = new Graph();
-        $g->desc = 'graph from Bender 2 IDE Test ...';
-        fscanf(
-            STDIN,
-            "%d",
-            $N
-        );
-        $g->v = $N + 1;
-        $g->vertexW = array();
-        // $g->edgeW = array();
-        $g->adjL = array();
-        for ($i = 0; $i < $N; $i++) {
-            $room = explode(' ', trim(fgets(STDIN)));
-            $r2 = (($room[2] == 'E') ? $N : $room[2]);
-            $r3 = (($room[3] == 'E') ? $N : $room[3]);
-            $g->adjL[$room[0]] = array();
-            $g->adjL[$room[0]][] = $r2;
-            if ($r3 != $r2) {
-                $g->adjL[$room[0]][] = $r3;
-            }
-            $g->vertexW[$room[0]] = $room[1];
-            // $g->edgeW[$room[0]][$r2] = -1 * $room[1];
-            // $g->edgeW[$room[0]][$r3] = -1 * $room[1];
-        }
-        $g->vertexW[$N] = 0;
-        $g->adjL[$N] = array();
-        $this->g = $g;
-    }
-    // function readInputBender2
-
-    public function readInputPlagueJr(): void
-    {
-        $g = new Graph();
-        $g->desc = 'graph from Plague Jr puzzle IDE Test ...';
-        $g->isDirected = false;
-        fscanf(
-            STDIN,
-            "%d",
-            $n
-        );
-        $g->adjL = array();
-        for ($i = 0; $i < $n; $i++) {
-            fscanf(
-                STDIN,
-                "%d %d",
-                $xi,
-                $yi
-            );
-            $g->adjL[$xi][] = $yi;
-            $g->adjL[$yi][] = $xi;
-        }
-        $g->v = count($g->adjL);
-        $this->g = $g;
-    }
-    // function readInputPlagueJr
-
-    public function readInputAStarExercise(): void
-    {
-        $g = new Graph();
-        $g->desc = 'graph from A Star Exercise puzzle IDE Test ...';
-        $g->isDirected = false;
-        fscanf(
-            STDIN,
-            "%d %d %d %d",
-            $N,
-            $E,
-            $S,
-            $G
-        );
-        $g->v = $N;
-        $g->startIdx = $S;
-        $g->targetIdx = $G;
-        $inputs = explode(" ", fgets(STDIN));
-        $g->heuristicScore = array();
-        for ($i = 0; $i < $N; $i++) {
-            $g->heuristicScore[$i] = intval($inputs[$i]);
-        }
-        $g->adjL = array();
-        $g->edgeW = array();
-        for ($i = 0; $i < $E; $i++) {
-            fscanf(
-                STDIN,
-                "%d %d %d",
-                $x,
-                $y,
-                $c
-            );
-            $g->adjL[$x][] = $y;
-            $g->adjL[$y][] = $x;
-            $g->edgeW[$x][$y] = $c;
-            $g->edgeW[$y][$x] = $c;
-        }
-        $this->g = $g;
-    }
-    // function readInputAStarExercise
-
-    // creates a test graph with fixed data in the source php file
-    public function getFixGraph(): void
-    {
-        $g = new Graph();
-        $g->v = 10;
-        $g->isDirected = false;
-        $g->vertexW =   explode(',', str_replace(' ', '', '  1,  1,  1,  1,  1,  1,  1,  1,  1,  1'));
-        //                                                #  0,  1,  2,  3,  4,  5,  6,  7,  8,  9
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  1,  0,  0,  0,  0,  0,  1,  0,  0')); // 0
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  1,  0,  1,  0,  0,  1,  0,  0,  0,  0')); // 1
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  1,  0,  1,  1,  0,  0,  0,  0,  0')); // 2
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  0,  1,  0,  0,  0,  0,  0,  0,  0')); // 3
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  0,  1,  0,  0,  0,  0,  0,  0,  0')); // 4
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  1,  0,  0,  0,  0,  0,  0,  0,  0')); // 5
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  0,  0,  0,  0,  0,  0,  0,  1,  0')); // 6
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  1')); // 7
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  0,  0,  0,  0,  0,  1,  0,  0,  0')); // 8
-        $g->adjM[] =    explode(',', str_replace(' ', '', '  0,  0,  0,  0,  0,  0,  0,  1,  0,  0')); // 9
-        /*
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  1,  7'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0,  2,  5'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        $g->adjL[] =   explode(',', str_replace(' ', '', '  0'));
-        */
-        /*
-        //                                                #  0,  1,  2,  3,  4,  5,  6,  7,  8,  9
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  0, 10,  0,  0,  0,  0,  0, 20,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', ' 30,  0, 40,  0,  0, 50,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        $g->edgeW[] =   explode(',', str_replace(' ', '', '  1,  0,  0,  0,  0,  0,  0,  0,  0,  0'));
-        */
-        $this->g = $g;
-    }
-    // function getFixGraph
-
-    // reads graph in my format from stdin, report to stdout
-    public function testGraph(): void
-    {
-        $g = new Graph();
-        $g->readGraph();
-        $g->analyzeGraph();
-        echo $g->reportGraph(100);
-        echo '  shortest path from 0 to ' . ($g->v - 1) . ': ' . implode('->', $g->getPath(0, $g->v - 1)) . "\n";
-        echo '  BFS traverse order: ';
-        $g->BFS(0, array('\Graph\Graph', 'callFunction'));
-        echo "\n";
-        echo '  DFS traverse order: ';
-        // $g->dfsIterative(0, array('\Graph\Graph', 'callFunction'));
-        $g->dfsIterative(0, '\Graph\Graph::callFunction');
-        echo "\n";
-        $this->g = $g;
-    }
-    // function testGraph
-}
-// class TestGraph
-
-// --------------------------------------------------------------------
-// ---------- main program
-$gt = new GraphTest();
-if (GENERATE_TEST_CASE) {
-    if (PUZZLE_ID == 0) {
-        $gt->readInputBender2();
-    } elseif (PUZZLE_ID == 1) {
-        $gt->readInputPlagueJr();
-    } elseif (PUZZLE_ID == 2) {
-        $gt->readInputAStarExercise();
-    } else {
-        throw new \Exception('Unsupported puzzle id!');
-    }
-    echo $gt->g->writeGraph();
-} else {
-    $gt->testGraph();
 }
