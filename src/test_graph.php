@@ -15,7 +15,9 @@ if (isset($argv[1])) {
     } elseif ($puzzle_id == 2) {
         $gt->readInputAStarExercise();
     } else {
-        throw new \Exception('Unsupported puzzle id!');
+        echo "ERROR: Unsupported puzzle id!", PHP_EOL;
+        echo "Valid arguments: 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise", PHP_EOL;
+        exit(1);
     }
     echo $gt->g->writeGraph();
 } else {

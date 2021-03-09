@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Graph;
 
-use Graph\Graph;
+//use Graph\Graph;
 
 class GraphWrapper
 {
