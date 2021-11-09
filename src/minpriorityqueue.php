@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Graph;
+namespace TBali\Graph;
 
 // --------------------------------------------------------------------
 // used by Dijkstra algorithm

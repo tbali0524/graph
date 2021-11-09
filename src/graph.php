@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Graph;
+namespace TBali\Graph;
 
 //use Graph\Node;
 //use Graph\MinPriorityQueue;

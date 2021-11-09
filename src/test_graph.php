@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 require_once "classloader.php";
 
-$gt = new Graph\GraphWrapper();
+use TBali\Graph\GraphWrapper;
+
+$gt = new GraphWrapper();
 if (isset($argv[1])) {
     // 0 = Bender2, 1 = Plague Jr, 2 = A-star expercise
     $puzzle_id = intval($argv[1]);

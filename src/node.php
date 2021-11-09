@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Graph;
+namespace TBali\Graph;
 
 // Problem specific data for each graph vertex
 class Node

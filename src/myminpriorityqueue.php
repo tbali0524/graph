@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Graph;
+namespace TBali\Graph;
 
 // --------------------------------------------------------------------
 // used by aStar algorithm
@@ -51,7 +51,7 @@ class MyMinPriorityQueue
         }
         $this->data[] = $item;
         $this->priority[$item] = $priority;
-        usort($this->data, array('\Graph\MyMinPriorityQueue', 'compare'));
+        usort($this->data, array(self::class, 'compare'));
     }
 
     public function changePriority($item, $priority): void
@@ -60,7 +60,7 @@ class MyMinPriorityQueue
             throw new \Exception(self::ERROR_MSG_CHANGE_NON_EXISTENT);
         }
         $this->priority[$item] = $priority;
-        usort($this->data, array('\Graph\MyMinPriorityQueue', 'compare'));
+        usort($this->data, array(self::class, 'compare'));
     }
 
     public function exists($item): bool

@@ -1,3 +1,3 @@
 @echo off
-del test\output_*.txt
-del test\converted_*.txt
+del output\output_*.txt
+del output\converted_*.txt

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Graph;
+namespace TBali\Graph;
 
-//use Graph\Graph;
+//use TBali\Graph\Graph;
 
 class GraphWrapper
 {
@@ -138,10 +138,10 @@ class GraphWrapper
         echo $g->reportGraph(100);
         echo '  shortest path from 0 to ' . ($g->v - 1) . ': ' . implode('->', $g->getPath(0, $g->v - 1)) . "\n";
         echo '  BFS traverse order: ';
-        $g->BFS(0, array('\Graph\Graph', 'callFunction'));
+        $g->BFS(0, [__NAMESPACE__ . '\Graph', 'callFunction']);
         echo "\n";
         echo '  DFS traverse order: ';
-        $g->dfsIterative(0, '\Graph\Graph::callFunction');
+        $g->dfsIterative(0, __NAMESPACE__ . '\Graph::callFunction');
         echo "\n";
         $this->g = $g;
     }
