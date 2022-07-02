@@ -1,6 +1,13 @@
 parameters:
     level: 5
-    phpVersion: 80000
+    phpVersion: 80100
+    editorUrl: 'vscode://file/%%file%%:%%line%%'
+    tmpDir: .tools/phpstan
+    reportUnmatchedIgnoredErrors: false
     paths:
         - src
-        - tests
+    excludePaths:
+        - .git
+        - .tools
+        - .vscode
+        - vendor

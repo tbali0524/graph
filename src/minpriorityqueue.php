@@ -6,10 +6,10 @@ namespace TBali\Graph;
 
 // --------------------------------------------------------------------
 // used by Dijkstra algorithm
-class MinPriorityQueue extends \SPLPriorityQueue
+class MinPriorityQueue extends \SplPriorityQueue
 {
     public function compare($a, $b): int
     {
-        return parent::compare($b, $a);     //inverse the order
+        return parent::compare($b, $a);     // inverse the order
     }
 }

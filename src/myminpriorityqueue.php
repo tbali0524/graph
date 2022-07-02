@@ -9,8 +9,8 @@ namespace TBali\Graph;
 // naive implementation using array, allows to change priority of any item
 class MyMinPriorityQueue
 {
-    private $data = array();                // array[0..] of value (int/float/string)
-    private $priority = array();            // array[value] of int/float
+    private $data = [];                // array[0..] of value (int/float/string)
+    private $priority = [];            // array[value] of int/float
 
     public const ERROR_MSG_GET_EMPTY = 'Trying to get item from empty Priority queue!';
     public const ERROR_MSG_INSERT_EXISTING = 'Trying to insert already existing item to Priority queue!';
@@ -51,7 +51,7 @@ class MyMinPriorityQueue
         }
         $this->data[] = $item;
         $this->priority[$item] = $priority;
-        usort($this->data, array(self::class, 'compare'));
+        usort($this->data, [self::class, 'compare']);
     }
 
     public function changePriority($item, $priority): void
@@ -60,7 +60,7 @@ class MyMinPriorityQueue
             throw new \Exception(self::ERROR_MSG_CHANGE_NON_EXISTENT);
         }
         $this->priority[$item] = $priority;
-        usort($this->data, array(self::class, 'compare'));
+        usort($this->data, [self::class, 'compare']);
     }
 
     public function exists($item): bool

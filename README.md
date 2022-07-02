@@ -5,7 +5,7 @@ Graph class and some related common algorithms in PHP
 v1.1
 (c) 2021 by _Balint Toth_
 
-![php-version-73](https://shields.io/badge/php->=7.3-blue) ![licence-MIT](https://img.shields.io/github/license/tbali0524/graph)
+![php-version-81](https://shields.io/badge/php->=8.1-blue) ![licence-MIT](https://img.shields.io/github/license/tbali0524/graph)
 
 ## Methods
 

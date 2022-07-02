@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TBali\Graph;
 
-//use TBali\Graph\Graph;
+// use TBali\Graph\Graph;
 
 class GraphWrapper
 {
@@ -14,16 +14,16 @@ class GraphWrapper
     {
         $g = new Graph();
         $g->desc = 'graph from Bender 2 IDE Test ...';
-        fscanf(STDIN, "%d", $N);
+        fscanf(STDIN, '%d', $N);
         $g->v = $N + 1;
-        $g->vertexW = array();
+        $g->vertexW = [];
         // $g->edgeW = array();
-        $g->adjL = array();
+        $g->adjL = [];
         for ($i = 0; $i < $N; $i++) {
             $room = explode(' ', trim(fgets(STDIN)));
             $r2 = (($room[2] == 'E') ? $N : $room[2]);
             $r3 = (($room[3] == 'E') ? $N : $room[3]);
-            $g->adjL[$room[0]] = array();
+            $g->adjL[$room[0]] = [];
             $g->adjL[$room[0]][] = $r2;
             if ($r3 != $r2) {
                 $g->adjL[$room[0]][] = $r3;
@@ -33,7 +33,7 @@ class GraphWrapper
             // $g->edgeW[$room[0]][$r3] = -1 * $room[1];
         }
         $g->vertexW[$N] = 0;
-        $g->adjL[$N] = array();
+        $g->adjL[$N] = [];
         $this->g = $g;
     }
     // function readInputBender2
@@ -43,10 +43,10 @@ class GraphWrapper
         $g = new Graph();
         $g->desc = 'graph from Plague Jr puzzle IDE Test ...';
         $g->isDirected = false;
-        fscanf(STDIN, "%d", $n);
-        $g->adjL = array();
+        fscanf(STDIN, '%d', $n);
+        $g->adjL = [];
         for ($i = 0; $i < $n; $i++) {
-            fscanf(STDIN, "%d %d", $xi, $yi);
+            fscanf(STDIN, '%d %d', $xi, $yi);
             $g->adjL[$xi][] = $yi;
             $g->adjL[$yi][] = $xi;
         }
@@ -60,19 +60,19 @@ class GraphWrapper
         $g = new Graph();
         $g->desc = 'graph from A Star Exercise puzzle IDE Test ...';
         $g->isDirected = false;
-        fscanf(STDIN, "%d %d %d %d", $N, $E, $S, $G);
+        fscanf(STDIN, '%d %d %d %d', $N, $E, $S, $G);
         $g->v = $N;
         $g->startIdx = $S;
         $g->targetIdx = $G;
-        $inputs = explode(" ", fgets(STDIN));
-        $g->heuristicScore = array();
+        $inputs = explode(' ', fgets(STDIN));
+        $g->heuristicScore = [];
         for ($i = 0; $i < $N; $i++) {
             $g->heuristicScore[$i] = intval($inputs[$i]);
         }
-        $g->adjL = array();
-        $g->edgeW = array();
+        $g->adjL = [];
+        $g->edgeW = [];
         for ($i = 0; $i < $E; $i++) {
-            fscanf(STDIN, "%d %d %d", $x, $y, $c);
+            fscanf(STDIN, '%d %d %d', $x, $y, $c);
             $g->adjL[$x][] = $y;
             $g->adjL[$y][] = $x;
             $g->edgeW[$x][$y] = $c;

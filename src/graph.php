@@ -4,7 +4,7 @@
  * ====================================================================
  * graph
  * (c) 2021 by Bálint Tóth (TBali)
- * a graph class and some related common algorithms in PHP
+ * a graph class and some related common algorithms in PHP.
  *
  * repository for latest source: https://github.com/tbali0524/graph
  * requires PHP v7.3 or higher
@@ -15,9 +15,9 @@ declare(strict_types=1);
 
 namespace TBali\Graph;
 
-//use Graph\Node;
-//use Graph\MinPriorityQueue;
-//use Graph\MyMinPriorityQueue;
+// use Graph\Node;
+// use Graph\MinPriorityQueue;
+// use Graph\MyMinPriorityQueue;
 
 const DEBUG = false;
 
@@ -117,7 +117,7 @@ class Graph
         $maxVertex = min($this->v, $maxVertex);
         $vw = ($maxVertex < 100 ? 2 : 3);       // format width for vertex index display
         $ww = 5;                                // format width for weight display
-        $s = 'GRAPH REPORT: ' . $this->desc .  "\n  ";
+        $s = 'GRAPH REPORT: ' . $this->desc . "\n  ";
         if ($this->isDirected) {
             $s .= 'directed ';
         }
@@ -272,7 +272,7 @@ class Graph
             for ($i = 0; $i < $maxVertex; $i++) {
                 $s .= '    #' . str_pad(strval($i), $vw);
                 for ($j = 0; $j < $maxVertex; $j++) {
-                    $s .= '|' . str_pad(strval($this->pathPrev[$i][$j]  ?? 'x'), $vw);
+                    $s .= '|' . str_pad(strval($this->pathPrev[$i][$j] ?? 'x'), $vw);
                 }
                 $s .= "\n";
             }
@@ -337,7 +337,7 @@ class Graph
             $s = $this->readNextLine(false);
         }
         if ($s == '; adjacency list') {
-            $this->adjL = array();
+            $this->adjL = [];
             for ($i = 0; $i < $this->v; $i++) {
                 $line = explode(',', $this->readNextLine());
                 if (strtolower($line[0]) == 'none') {
@@ -353,7 +353,7 @@ class Graph
         }
         if ($s == '; adjacency matrix') {
             $this->adjL = null;
-            $this->adjM = array();
+            $this->adjM = [];
             for ($i = 0; $i < $this->v; $i++) {
                 $line = explode(',', $this->readNextLine());
                 for ($j = 0; $j < count($line); $j++) {
@@ -366,11 +366,11 @@ class Graph
         if ($s == '; edge weights') {
             $e = $this->readNextLine(false);
             $this->adjM = null;
-            $this->adjL = array();
-            $this->edgeW = array();
+            $this->adjL = [];
+            $this->edgeW = [];
             for ($i = 0; $i < $this->v; $i++) {
-                $this->adjL[$i] = array();
-                $this->edgeW[$i] = array();
+                $this->adjL[$i] = [];
+                $this->edgeW[$i] = [];
             }
             for ($i = 0; $i < $e; $i++) {
                 $line = explode(',', $this->readNextLine());
@@ -450,7 +450,7 @@ class Graph
     public function adjL2M(): void
     {
         if (!is_null($this->adjL)) {
-            $this->adjM = array();
+            $this->adjM = [];
             for ($i = 0; $i < $this->v; $i++) {
                 for ($j = 0; $j < $this->v; $j++) {
                     $this->adjM[$i][$j] = 0;
@@ -460,9 +460,9 @@ class Graph
                 }
             }
         } elseif (!is_null($this->adjM)) {
-            $this->adjL = array();
+            $this->adjL = [];
             for ($i = 0; $i < $this->v; $i++) {
-                $this->adjL[$i] = array();
+                $this->adjL[$i] = [];
                 for ($j = 0; $j < $this->v; $j++) {
                     for ($k = 0; $k < $this->adjM[$i][$j]; $k++) {
                         $this->adjL[$i][] = $j;
@@ -538,8 +538,8 @@ class Graph
     //      result: inDegree, outDegree
     public function countDegrees(): void
     {
-        $this->inDegree = array();
-        $this->outDegree = array();
+        $this->inDegree = [];
+        $this->outDegree = [];
         for ($i = 0; $i < $this->v; $i++) {
             $this->outDegree[$i] = 0;
             $this->inDegree[$i] = 0;
@@ -595,7 +595,7 @@ class Graph
         if (is_null($this->adjL)) {
             $this->adjL2M();
         }
-        $this->dist = array();
+        $this->dist = [];
         for ($i = 0; $i < $this->v; $i++) {
             for ($j = 0; $j < $this->v; $j++) {
                 $this->dist[$i][$j] = self::INFINITY;
@@ -618,7 +618,7 @@ class Graph
             $this->dist[$i][$i] = 0;
         }
         if ($createPath) {
-            $this->pathNext = array();
+            $this->pathNext = [];
             foreach ($this->adjL as $from => $adj) {
                 foreach ($adj as $to) {
                     $this->pathNext[$from][$to] = $to;
@@ -631,7 +631,7 @@ class Graph
         for ($k = 0; $k < $this->v; $k++) {
             for ($i = 0; $i < $this->v; $i++) {
                 for ($j = 0; $j < $this->v; $j++) {
-                    if (($this->dist[$i][$k] == self::INFINITY) or  ($this->dist[$k][$j] == self::INFINITY)) {
+                    if (($this->dist[$i][$k] == self::INFINITY) or ($this->dist[$k][$j] == self::INFINITY)) {
                         continue;
                     }
                     $alt = $this->dist[$i][$k] + $this->dist[$k][$j];
@@ -683,8 +683,8 @@ class Graph
         }
         $pq = new MinPriorityQueue();
         $pq->setExtractFlags(MinPriorityQueue::EXTR_DATA);
-        $this->dist[$from] = array();
-        $this->pathPrev[$from] = array();
+        $this->dist[$from] = [];
+        $this->pathPrev[$from] = [];
         for ($j = 0; $j < $this->v; $j++) {
             $this->dist[$from][$j] = self::INFINITY;
         }
@@ -734,8 +734,8 @@ class Graph
         if (is_null($this->adjL)) {
             $this->adjL2M();
         }
-        $this->dist[$from] = array();
-        $this->pathPrev[$from] = array();
+        $this->dist[$from] = [];
+        $this->pathPrev[$from] = [];
         for ($j = 0; $j < $this->v; $j++) {
             $this->dist[$from][$j] = self::INFINITY;
         }
@@ -790,7 +790,7 @@ class Graph
         }
         if (is_null($this->heuristicScore)) {
             $wasHeurScores = false;
-            $this->heuristicScore = array();
+            $this->heuristicScore = [];
             for ($j = 0; $j < $this->v; $j++) {
                 $this->heuristicScore[$j] = 0;
             }      // with no heuristic score, A* is same as Dijkstra
@@ -806,10 +806,10 @@ class Graph
             $this->adjL2M();
         }
         $pq = new MyMinPriorityQueue();             // OpenSet
-        $inClosedSet = array();                     // ClosedSet (array[idx] of bool)
-        $this->dist[$from] = array();               // gScore (distance: from -> idx
-        $fScore = array();                          // fScore (gScore + heuristicDist)
-        $this->pathPrev[$from] = array();           // cameFrom
+        $inClosedSet = [];                     // ClosedSet (array[idx] of bool)
+        $this->dist[$from] = [];               // gScore (distance: from -> idx
+        $fScore = [];                          // fScore (gScore + heuristicDist)
+        $this->pathPrev[$from] = [];           // cameFrom
         for ($j = 0; $j < $this->v; $j++) {
             $this->dist[$from][$j] = self::INFINITY;
             $fScore[$j] = self::INFINITY;
@@ -875,7 +875,7 @@ class Graph
         if ($from == $to) {
             return [$from];
         }
-        $path = array();
+        $path = [];
         if (!is_null($this->pathNext) and isset($this->pathNext[$from][$to])) {
             $path[] = $from;
             while ($from != $to) {
@@ -904,9 +904,9 @@ class Graph
         if (($from < 0) or ($from >= $this->v)) {
             return false;
         }
-        $visited = array();
-        $this->parent = array();
-        $q = array();
+        $visited = [];
+        $this->parent = [];
+        $q = [];
         $qWriteIdx = 0;
         $qReadIdx = 0;
         $visited[$from] = true;
@@ -937,9 +937,9 @@ class Graph
         if (($from < 0) or ($from >= $this->v)) {
             return false;
         }
-        $visited = array();
-        $this->parent = array();
-        $stack = array();
+        $visited = [];
+        $this->parent = [];
+        $stack = [];
         $stack[] = $from;
         while (count($stack) > 0) {
             $curr = array_pop($stack);
@@ -994,7 +994,7 @@ class Graph
         if ($this->isDirected) {
             return;
         }
-        $this->componentIdx = array();
+        $this->componentIdx = [];
         $this->componentCount = 0;
         for ($i = 0; $i < $this->v; $i++) {
             if (!isset($this->componentIdx[$i])) {
